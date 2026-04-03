@@ -18,5 +18,24 @@ namespace PortfolioTracker.Domain.Entities
         public ICollection<Portfolio> Portfolios { get; private set; } = new HashSet<Portfolio>();
         public ICollection<Watchlist> Watchlists { get; private set; } = new HashSet<Watchlist>();
         public ICollection<PriceAlert> PriceAlerts { get; private set; } = new HashSet<PriceAlert>();
+
+        private User() { }
+
+        public User(string email, string passwordHash, string fullName)
+        {
+            Id = Guid.NewGuid();
+            Email = email;
+            PasswordHash = passwordHash;
+            FullName = fullName;
+        }
+
+        public void UpdateRefreshToken(string? token, DateTime? expiry)
+        {
+            RefreshToken = token;
+            RefreshTokenExpiryTime = expiry;
+
+        }
     }
+
+    
 }
