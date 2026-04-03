@@ -7,7 +7,7 @@ namespace PortfolioTracker.Application.Interfaces
 {
     public interface ICurrentUserService
     {
-        Guid UserId { get; }
+        Guid? UserId { get; }
         bool IsAuthenticated { get; }
     }
 

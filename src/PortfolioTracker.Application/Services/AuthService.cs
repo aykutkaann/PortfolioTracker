@@ -16,7 +16,7 @@ namespace PortfolioTracker.Application.Services
         {
             var existing = await userRepository.GetByEmailAsync(request.Email, ct);
             if (existing != null)
-                throw new Exception("Email alredy in use.");
+                throw new InvalidOperationException("Email alredy in use.");
 
             var hashPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
