@@ -29,6 +29,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+builder.Services.AddScoped<IPortfolioService, PortfolioService>();
+builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -66,5 +70,7 @@ app.UseHttpsRedirection();
 app.MapGet("/", () => "Hello World!").RequireAuthorization();
 
 app.MapAuthEndpoints();
+
+app.MapPortfolioEndpoints();
 
 app.Run();

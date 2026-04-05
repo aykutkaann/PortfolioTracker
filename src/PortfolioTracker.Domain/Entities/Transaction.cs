@@ -16,5 +16,17 @@ namespace PortfolioTracker.Domain.Entities
 
         public Holding Holding { get; private set; }
 
+        private Transaction() { }
+
+        public Transaction(Guid holdingId, TransactionType type, decimal quantity, decimal pricePerUnit)
+        {
+            Id = Guid.NewGuid();
+            HoldingId = holdingId;
+            Type = type;
+            Quantity = quantity;
+            PricePerUnit = pricePerUnit;
+            ExecutedAt = DateTime.UtcNow;
+        }
+
     }
 }

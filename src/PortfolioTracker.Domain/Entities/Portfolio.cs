@@ -16,6 +16,16 @@ namespace PortfolioTracker.Domain.Entities
 
         public ICollection<Holding> Holdings { get; private set; } = new HashSet<Holding>();
 
+        private Portfolio() { }
+
+
+        public Portfolio(Guid userId, string name)
+        {
+            Id = Guid.NewGuid();
+            UserId = userId;
+            Name = name;
+            CreatedAt = DateTime.UtcNow;
+        }
 
     }
 }
