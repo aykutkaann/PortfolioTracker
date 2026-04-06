@@ -16,6 +16,9 @@ namespace PortfolioTracker.Infrastructure.Persistence.Configurations
 
             builder.HasKey(w => w.Id);
 
+            builder.Property(h => h.Id).ValueGeneratedNever();
+
+
             builder.Property(w => w.Symbol).IsRequired().HasMaxLength(20);
 
             builder.Property(w => w.AssetType).HasConversion<string>().IsRequired();

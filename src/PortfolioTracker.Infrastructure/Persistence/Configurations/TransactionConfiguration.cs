@@ -13,6 +13,9 @@ namespace PortfolioTracker.Infrastructure.Persistence.Configurations
 
             builder.HasKey(t => t.Id);
 
+            builder.Property(h => h.Id).ValueGeneratedNever();
+
+
             builder.Property(t => t.Type).HasConversion<string>();
 
             builder.Property(t => t.Quantity).IsRequired().HasPrecision(18, 8);

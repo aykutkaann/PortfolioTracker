@@ -16,6 +16,9 @@ namespace PortfolioTracker.Infrastructure.Persistence.Configurations
 
             builder.HasKey(p => p.Id);
 
+            builder.Property(h => h.Id).ValueGeneratedNever();
+
+
             builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
 
             builder.Property(p => p.CreatedAt).HasColumnType("timestamptz");

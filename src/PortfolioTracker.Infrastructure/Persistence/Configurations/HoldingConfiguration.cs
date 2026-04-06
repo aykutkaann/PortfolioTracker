@@ -15,6 +15,9 @@ namespace PortfolioTracker.Infrastructure.Persistence.Configurations
 
             builder.HasKey(h => h.Id);
 
+            builder.Property(h => h.Id).ValueGeneratedNever();
+
+
             builder.Property(h => h.Symbol).IsRequired().HasMaxLength(20);
 
             builder.Property(h => h.Quantity).IsRequired().HasPrecision(18, 8);
@@ -22,6 +25,7 @@ namespace PortfolioTracker.Infrastructure.Persistence.Configurations
             builder.Property(h => h.AverageBuyPrice).IsRequired().HasPrecision(18, 8);
 
             builder.Property(h => h.AssetType).HasConversion<string>().IsRequired();
+
 
 
 

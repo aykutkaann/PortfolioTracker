@@ -12,5 +12,9 @@ namespace PortfolioTracker.Application.Interfaces
         Task AddAsync(Portfolio portfolio, CancellationToken ct);
         Task UpdateAsync(Portfolio portfolio, CancellationToken ct);
         Task DeleteAsync(Portfolio portfolio, CancellationToken ct);
+
+        Task SaveChangesAsync(CancellationToken ct);
+
+
     }
 }

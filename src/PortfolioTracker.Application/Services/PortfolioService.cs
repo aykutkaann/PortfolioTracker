@@ -65,9 +65,9 @@ namespace PortfolioTracker.Application.Services
             if (portfolio == null) throw new Exception("Portfolio not found.");
             if (portfolio.UserId != currentUserService.UserId) throw new UnauthorizedAccessException("You dont have access for this operation.");
 
-            var assetType = Enum.Parse<AssetType>(request.AssetType);
+            var assetType = Enum.Parse<AssetType>(request.AssetType, ignoreCase: true);
 
-            var transactionType = Enum.Parse<TransactionType>(request.Type);
+            var transactionType = Enum.Parse<TransactionType>(request.Type, ignoreCase: true);
 
             var holding = portfolio.Holdings.FirstOrDefault(h => h.Symbol == request.Symbol);
 
@@ -98,7 +98,7 @@ namespace PortfolioTracker.Application.Services
             var transaction = new Transaction(holding.Id, transactionType, request.Quantity, request.PricePerUnit);
             holding.Transactions.Add(transaction);
 
-            await portfolioRepository.UpdateAsync(portfolio, ct);
+            await portfolioRepository.SaveChangesAsync(ct);
 
             return new TransactionResponse(transaction.Id, holding.Symbol, transactionType.ToString(), transaction.Quantity, transaction.PricePerUnit, transaction.ExecutedAt);
 

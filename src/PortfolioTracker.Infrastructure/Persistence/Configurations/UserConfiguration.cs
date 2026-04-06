@@ -15,6 +15,9 @@ namespace PortfolioTracker.Infrastructure.Persistence.Configurations
 
             builder.HasKey(u => u.Id);
 
+            builder.Property(h => h.Id).ValueGeneratedNever();
+
+
             builder.HasIndex(u => u.Email).IsUnique();
 
             builder.Property(u => u.Email).IsRequired().HasMaxLength(256);

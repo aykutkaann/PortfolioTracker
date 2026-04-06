@@ -13,7 +13,7 @@ namespace PortfolioTracker.Infrastructure.Repositories
         public async Task<Portfolio?> GetByIdAsync(Guid id, CancellationToken ct)
         {
             return await context.Portfolios
-                .Include(p=> p.Holdings)
+                .Include(p=> p.Holdings).ThenInclude(h => h.Transactions)
                 .FirstOrDefaultAsync(p => p.Id == id,ct);
 
            
@@ -24,6 +24,7 @@ namespace PortfolioTracker.Infrastructure.Repositories
         {
             return await context.Portfolios
                     .Where(p => p.UserId == userId)
+                     .Include(p => p.Holdings).ThenInclude(h => h.Transactions)
                     .ToListAsync(ct);
 
         }
@@ -37,9 +38,15 @@ namespace PortfolioTracker.Infrastructure.Repositories
 
         public async Task UpdateAsync(Portfolio portfolio, CancellationToken ct)
         {
-            context.Update(portfolio);
             await context.SaveChangesAsync(ct);
         }
+
+
+        public async Task SaveChangesAsync(CancellationToken ct)
+        {
+            await context.SaveChangesAsync(ct);
+        }
+
 
         public async Task DeleteAsync(Portfolio portfolio, CancellationToken ct)
         {
