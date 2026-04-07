@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using PortfolioTracker.Application.Interfaces;
+using System.Security.Claims;
 
 namespace PortfolioTracker.Api.Hubs
 {
@@ -14,5 +15,14 @@ namespace PortfolioTracker.Api.Hubs
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, symbol.ToUpper());
         }
+
+        public override async Task OnConnectedAsync()
+        {
+            var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != null)
+                await Groups.AddToGroupAsync(Context.ConnectionId, $"user:{userId}");
+            await base.OnConnectedAsync();
+        }
+
     }
 }
