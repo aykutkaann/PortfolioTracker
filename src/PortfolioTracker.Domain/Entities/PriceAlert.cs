@@ -17,5 +17,26 @@ namespace PortfolioTracker.Domain.Entities
         public DateTime CreatedAt { get; private set; }
 
         public User User { get; private set; }
+
+
+        private PriceAlert() { }
+
+        public PriceAlert(Guid userId, string symbol, AssetType assetType, decimal targetPrice, bool isAbove)
+        {
+            Id = Guid.NewGuid();
+            UserId = userId;
+            Symbol = symbol;
+            AssetType = assetType;
+            TargetPrice = targetPrice;
+            IsAbove = isAbove;
+            IsTriggered = false;
+            CreatedAt = DateTime.UtcNow;
+
+        }
+
+        public void Trigger()
+        {
+            IsTriggered = true;
+        }
     }
 }
