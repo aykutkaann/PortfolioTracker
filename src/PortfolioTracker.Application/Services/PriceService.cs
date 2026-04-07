@@ -8,10 +8,6 @@ namespace PortfolioTracker.Application.Services
 {
     public class PriceService(IPriceClient priceClient, ICacheService cacheService) :IPriceService
     {
-
-        
-
-
         public async Task<decimal?> GetPriceAsync(string symbol, AssetType assetType)
         {
             var cacheKey = $"price:{symbol.ToUpper()}";

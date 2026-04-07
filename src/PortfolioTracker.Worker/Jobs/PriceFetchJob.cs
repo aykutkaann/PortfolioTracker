@@ -1,6 +1,10 @@
-﻿using PortfolioTracker.Application.Interfaces;
+﻿using MassTransit;
+using PortfolioTracker.Application.Interfaces;
+using PortfolioTracker.Domain.Enums;
+using PortfolioTracker.Domain.Events;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace PortfolioTracker.Worker.Jobs
@@ -30,13 +34,19 @@ namespace PortfolioTracker.Worker.Jobs
                     var priceClient = scope.ServiceProvider.GetRequiredService<IPriceClient>();
 
                     var prices = await priceClient.GetCryptoPricesAsync(_symbols);
-
+             
+                    var publishEndpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
 
                     foreach (var (symbol, price) in prices)
                     {
                         var cacheKey = $"price:{symbol.ToUpper()}";
                         await cacheService.SetAsync(cacheKey, price, TimeSpan.FromSeconds(60));
+
+                        await publishEndpoint.Publish(new PriceUpdatedEvent(
+                            symbol, AssetType.Crypto, price, DateTime.UtcNow
+                        ));
                     }
+
 
                     _logger.LogInformation("{Time}: {Count} crypto prices has been updated",
                         DateTimeOffset.Now, prices.Count);
@@ -47,6 +57,9 @@ namespace PortfolioTracker.Worker.Jobs
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+
+            
+
             }
         }
     }

@@ -1,8 +1,11 @@
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PortfolioTracker.Api.Endpoints;
+using PortfolioTracker.Api.Hubs;
+using PortfolioTracker.Api.Messaging.Consumers;
 using PortfolioTracker.Application.Interfaces;
 using PortfolioTracker.Application.Services;
 using PortfolioTracker.Infrastructure.Caching;
@@ -91,6 +94,24 @@ builder.Services.AddScoped<IPriceService, PriceService>();
 builder.Services.AddHttpClient<IPriceClient, CoinGeckoClient>();
 
 
+builder.Services.AddSignalR();
+
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<PriceUpdatedConsumer>();
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ConfigureEndpoints(context);
+    });
+});
+
+
 
 
 
@@ -98,6 +119,10 @@ var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHub<PriceHub>("/hubs/prices");
+
+
 
 if (app.Environment.IsDevelopment())
 {
