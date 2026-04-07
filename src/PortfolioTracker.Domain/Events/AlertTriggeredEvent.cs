@@ -9,5 +9,6 @@ namespace PortfolioTracker.Domain.Events
         Guid UserId,
         string Symbol,
         decimal CurrentPrice,
-        decimal TargetPrice);
+        decimal TargetPrice
+        );
 }
