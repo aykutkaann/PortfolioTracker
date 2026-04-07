@@ -5,8 +5,11 @@ using Microsoft.OpenApi.Models;
 using PortfolioTracker.Api.Endpoints;
 using PortfolioTracker.Application.Interfaces;
 using PortfolioTracker.Application.Services;
+using PortfolioTracker.Infrastructure.Caching;
+using PortfolioTracker.Infrastructure.ExternalApis;
 using PortfolioTracker.Infrastructure.Persistence;
 using PortfolioTracker.Infrastructure.Repositories;
+using StackExchange.Redis;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -77,6 +80,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+
+
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(
+    ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")!));
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
+builder.Services.AddScoped<IPriceService, PriceService>();
+builder.Services.AddHttpClient<IPriceClient, CoinGeckoClient>();
+
+
+
 
 
 var app = builder.Build();

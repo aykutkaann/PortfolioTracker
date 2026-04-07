@@ -13,6 +13,8 @@ namespace PortfolioTracker.Infrastructure.ExternalApis
         public CoinGeckoClient(HttpClient client)
         {
             _client = client;
+            _client.DefaultRequestHeaders.UserAgent.ParseAdd("PortfolioTracker/1.0");
+
         }
 
 

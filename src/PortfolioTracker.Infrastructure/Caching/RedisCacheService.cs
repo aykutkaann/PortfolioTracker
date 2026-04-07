@@ -16,7 +16,7 @@ namespace PortfolioTracker.Infrastructure.Caching
             _db = redis.GetDatabase();
         }
 
-        public async Task<T?> GetAsync<T>(string key, CancellationToken ct)
+        public async Task<T?> GetAsync<T>(string key)
         {
             var value = await _db.StringGetAsync(key);
 
@@ -27,14 +27,15 @@ namespace PortfolioTracker.Infrastructure.Caching
             return JsonSerializer.Deserialize<T>(value.ToString());
         }
 
-        public async Task SetAsync(string key, Task value, TimeSpan expiry, CancellationToken ct)
+        public async Task SetAsync<T>(string key, T value, TimeSpan expiry)
+
         {
             var json = JsonSerializer.Serialize(value);
 
             await _db.StringSetAsync(key, json, expiry);
         }
 
-        public async Task RemoveAsync(string key, CancellationToken ct)
+        public async Task RemoveAsync(string key)
         {
             await _db.KeyDeleteAsync(key);
         }
