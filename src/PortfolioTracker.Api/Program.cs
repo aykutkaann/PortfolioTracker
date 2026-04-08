@@ -1,5 +1,7 @@
 using MassTransit;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -8,6 +10,7 @@ using PortfolioTracker.Api.Hubs;
 using PortfolioTracker.Api.Messaging.Consumers;
 using PortfolioTracker.Application.Interfaces;
 using PortfolioTracker.Application.Services;
+using PortfolioTracker.Application.Validators;
 using PortfolioTracker.Infrastructure.Caching;
 using PortfolioTracker.Infrastructure.ExternalApis;
 using PortfolioTracker.Infrastructure.Persistence;
@@ -17,6 +20,24 @@ using StackExchange.Redis;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ── Validators ── 
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+
+/*Going to update later
+ * builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequiredUniqueChars = 1;
+});  */
 
 // ── Logging ──
 builder.Host.UseSerilog((context, config) =>
@@ -86,6 +107,8 @@ builder.Services.AddMassTransit(x =>
         cfg.ConfigureEndpoints(context);
     });
 });
+
+
 
 // ── Swagger ──
 builder.Services.AddEndpointsApiExplorer();

@@ -1,6 +1,9 @@
 ﻿
-using PortfolioTracker.Application.Interfaces;
+using FluentValidation;
+using PortfolioTracker.Api.Filters;
 using PortfolioTracker.Application.DTOs.Auth;
+using PortfolioTracker.Application.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace PortfolioTracker.Api.Endpoints
 {
@@ -26,7 +29,7 @@ namespace PortfolioTracker.Api.Endpoints
                     return Results.BadRequest(new { message = err.Message });
                 }
 
-            });
+            }).AddEndpointFilter<ValidationFilter<RegisterRequest>>();
 
             group.MapPost("/login", async (LoginRequest request, IAuthService service, CancellationToken ct) =>
             {
@@ -47,7 +50,7 @@ namespace PortfolioTracker.Api.Endpoints
                 }
 
 
-            });
+            }).AddEndpointFilter<ValidationFilter<LoginRequest>>();
 
             group.MapPost("/refresh", async (RefreshTokenRequest request, IAuthService service, CancellationToken ct) =>
             {
