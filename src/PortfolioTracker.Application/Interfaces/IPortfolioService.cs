@@ -7,7 +7,7 @@ namespace PortfolioTracker.Application.Interfaces
 {
     public interface IPortfolioService
     {
-        Task<PortfolioResponse> CreateAsync(CreatePortfolioRequest request, CancellationToken ct);
+             Task<PortfolioResponse> CreateAsync(CreatePortfolioRequest request, CancellationToken ct);
              Task<List<PortfolioResponse>> GetAllAsync(CancellationToken ct);
              Task<PortfolioResponse> GetByIdAsync(Guid id, CancellationToken ct);
              Task DeleteAsync(Guid id , CancellationToken ct);
